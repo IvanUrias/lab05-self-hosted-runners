@@ -1,0 +1,33 @@
+name: Troubleshooting - Errores Deliberados
+
+on: workflow_dispatch
+
+jobs:
+
+  error-label-incorrecto:
+    name: "ERROR 1 - Label incorrecto"
+    runs-on: [self-hosted, label-que-no-existe]
+    steps:
+      - name: Este job nunca arrancara
+        run: echo "Nunca se ejecuta"
+
+  error-dependencia:
+    name: "ERROR 2 - Dependencia inexistente"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Usar herramienta inexistente
+        run: programa-que-no-existe --version
+
+  error-path-invalido:
+    name: "ERROR 3 - Path invalido"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Acceder a ruta inexistente
+        run: cd /ruta/que/no/existe && ls -la
+
+  error-permisos:
+    name: "ERROR 4 - Error de permisos"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Escribir sin permisos
+        run: echo "test" > /etc/archivo-sin-permisos.txt
