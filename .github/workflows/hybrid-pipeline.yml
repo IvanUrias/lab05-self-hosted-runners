@@ -1,0 +1,45 @@
+name: Pipeline Híbrido
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  # JOB 1 - Corre en GitHub hosted
+  job-hosted:
+    name: "Job en GitHub Hosted"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Info del runner hosted
+        run: |
+          echo "Corriendo en runner HOSTED"
+          echo "OS: $(uname -a)"
+          echo "Usuario: $(whoami)"
+          echo "Directorio: $(pwd)"
+
+  # JOB 2 - Corre en tu runner local
+  job-self-hosted:
+    name: "Job en Self-Hosted"
+    runs-on: [self-hosted, tajamar]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Info del runner self-hosted
+        run: |
+          echo "Corriendo en runner SELF-HOSTED"
+          echo "OS: $(uname -a)"
+          echo "Usuario: $(whoami)"
+          echo "Directorio: $(pwd)"
+          echo "Hostname: $(hostname)"
+
+  # JOB 3 - Depende de ambos, corre en hosted
+  job-final:
+    name: "Job Final (resumen)"
+    runs-on: ubuntu-latest
+    needs: [job-hosted, job-self-hosted]
+    steps:
+      - name: Resumen
+        run: |
+          echo "Ambos jobs completados correctamente"
+          echo "Pipeline híbrido exitoso ✅"
